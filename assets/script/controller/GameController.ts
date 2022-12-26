@@ -5,6 +5,9 @@ const { ccclass, property } = _decorator;
 
 @ccclass('GameController')
 export class GameController extends Component {
+    //1. tinh diem + hien thi diem: 10d
+    //2. Finish len level-> co box thong bao co nut de next level, level 1: 6 cap, level 2 8 cap, level 3 10
+    //3. Vi tri random, va co dinh 
     gameModel: GameModel;
     oldCard: Card;
     //
