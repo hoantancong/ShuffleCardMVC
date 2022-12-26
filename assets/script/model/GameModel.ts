@@ -16,6 +16,8 @@ export class GameModel extends Component {
     levelLb: Label;
     @property(Sprite)
     gamebackground: Sprite;
+    @property(Prefab)
+    gameOver: Prefab;
     //
     cardSpriteFrameList: SpriteFrame[] = [];
     cardBackSpriteFrame: SpriteFrame;
@@ -26,12 +28,12 @@ export class GameModel extends Component {
 
 
     //prefab
-
+    COLROWS = [[4,2],[5,2],[6,2]]
 
     //constant
     NUM_OF_COL = 6;
     NUM_OF_ROW = 2;
-    CARD_TYPE_LIST = [0,1,2,3,4,5,0,1,2,3,4,5];
+    CARD_TYPE_LIST = [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9];
     //variable
     gameScore = 0;
     gameLevel;
@@ -39,6 +41,7 @@ export class GameModel extends Component {
 
 
     start() {
+ 
 
         //load sprite texture
         ResourceUtils.loadDirSprite(Configs.CARDLIST_SPRITE_PATH, (spriteFrameList: SpriteFrame[]) => {
