@@ -18,6 +18,9 @@ export class GameModel extends Component {
     gamebackground: Sprite;
     @property(Prefab)
     gameOver: Prefab;
+    @property({type: Label})
+    public stepsLabel: Label|null = null;
+    
     //
     cardSpriteFrameList: SpriteFrame[] = [];
     cardBackSpriteFrame: SpriteFrame;
@@ -28,7 +31,7 @@ export class GameModel extends Component {
 
 
     //prefab
-    COLROWS = [[4,2],[5,2],[6,2]]
+    COLROWS = [[4,2],[5,2],[6,2],[7,2],[8,2]]
 
     //constant
     NUM_OF_COL = 6;

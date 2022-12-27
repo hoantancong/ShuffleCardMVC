@@ -52,6 +52,7 @@ export class Card extends Component {
     update(deltaTime: number) {
         
     }
+   
 }
 
 

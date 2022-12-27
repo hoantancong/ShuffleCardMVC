@@ -9,13 +9,14 @@ const { ccclass, property } = _decorator;
 export class GameController extends Component {
     gameModel: GameModel;
     oldCard: Card;
-    cardcount ;
+    cardcount;
     COL = 0;
     ROW = 1;
+    score = 0;
     //
     start() {
         //get from save
-   
+
     }
     startGame(gameModel: GameModel) {
         this.gameModel = gameModel;
@@ -27,20 +28,20 @@ export class GameController extends Component {
         let colrow = this.gameModel.COLROWS[gameLevel] //4,2 [4,2]
         //load background
         this.gameModel.setGameBackground();
-        this.gameModel.levelLb.string = 'Level '+(gameLevel+1);
+        this.gameModel.levelLb.string = 'Level ' + (gameLevel + 1);
         let count = 0;
-        this.cardcount = colrow[0]*colrow[1] //4x2
+        this.cardcount = colrow[0] * colrow[1] //4x2
         let needCard = this.cardcount;
-        let newArr = this.gameModel.CARD_TYPE_LIST.slice(0,needCard);
-        console.log('len1:',newArr);
+        let newArr = this.gameModel.CARD_TYPE_LIST.slice(0, needCard);
+        console.log('len1:', newArr);
         this.shuffle(newArr);
-        console.log('len:',newArr);
+        console.log('len:', newArr);
         //get card back
         for (let i = 0; i < colrow[this.ROW]; i++) {
             for (let j = 0; j < colrow[this.COL]; j++) {
                 let type = newArr[count];
                 let newCard = instantiate(this.gameModel.cardPrefab);
-                 newCard.setPosition(new Vec3((115*j)-280,135*i))
+                newCard.setPosition(new Vec3((115 * j) - 280, 135 * i))
                 newCard.getComponent(Card).setUp(type, this.gameModel.cardSpriteFrameList[type], this.gameModel.cardBackSpriteFrame, (card: Card) => {
                     this.touchCard(card);
                 });
@@ -49,12 +50,12 @@ export class GameController extends Component {
             }
         }
     }
-    private shuffle(array){
-       
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
+    private shuffle(array) {
+
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
 
         //return array;
     }
@@ -64,7 +65,7 @@ export class GameController extends Component {
             this.oldCard = null;
         } else {
             if (this.oldCard == null) {
-                card.openCard(()=>{
+                card.openCard(() => {
                     this.oldCard = card;
                 })
             } else {
@@ -78,11 +79,14 @@ export class GameController extends Component {
                         card.node.destroy();
                         this.oldCard.node.destroy();
                         this.oldCard = null;
-                        this.cardcount-=2;
-                        if(this.cardcount == 0){
-                        this.gamefinish();
+                        this.cardcount -= 2;
+                        this.score++;
+                        //update score
+                        this.gameModel.stepsLabel.string = 'Score :' + this.score;
+                        if (this.cardcount == 0) {
+                            this.gamefinish();
                         }
-                    
+
                     } else {
                         //not the same
                         console.log('Not The same.....');
@@ -98,24 +102,24 @@ export class GameController extends Component {
 
 
     }
-    gamefinish(){
+    gamefinish() {
         console.log('game over')
         let gameOver = instantiate(this.gameModel.gameOver)
-        gameOver.getComponent(button).setup(100,()=>{
+        gameOver.getComponent(button).setup(this.score, () => {
             //khi player an reload
-            this.reloadGame();  
+            this.reloadGame();
         },
-        ()=>{
-            //khi player an next
-            this.nextLevel();
-        })
+            () => {
+                //khi player an next
+                this.nextLevel();
+            })
         gameOver.setParent(this.gameModel.uiNode)
-     
+
     }
-    reloadGame(){
+    reloadGame() {
         director.loadScene("game")
     }
-    nextLevel(){
+    nextLevel() {
         DataController.instant.gameLevel++;
         //save game level
         //
